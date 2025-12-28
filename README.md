@@ -5,8 +5,11 @@ A thrilling maze escape game where you navigate through procedurally generated m
 ## 🎮 Game Features
 
 - **Procedurally Generated Mazes**: Each level features a unique maze created using recursive backtracking algorithm
-- **Custom Player Graphics**: Beautifully designed player character with detailed animations
+- **3D Visual Effects**: Stunning depth perception with shadows, highlights, and glowing effects
+- **Custom Player Graphics**: Beautifully designed player character with detailed animations and glowing effect
 - **Enemy AI**: Intelligent enemies that chase you through the maze with custom graphics
+- **Smart Enemy Placement**: Enemies spawn away from player and goal to ensure fair gameplay
+- **Guaranteed Winnable**: Pathfinding ensures goal is always reachable from start
 - **Progressive Difficulty**: More enemies appear as you advance through levels
 - **Lives System**: Start with 3 lives - avoid enemies or lose a life!
 - **Score Tracking**: Earn points by completing levels
@@ -50,8 +53,10 @@ No installation or setup required - just pure HTML5, CSS3, and JavaScript.
 ## 🛠️ Technical Details
 
 - Built with vanilla JavaScript (no frameworks)
-- HTML5 Canvas for rendering
+- HTML5 Canvas for rendering with 3D visual effects
 - Responsive CSS design
+- BFS pathfinding algorithm ensures maze is always solvable
+- Smart enemy placement with distance constraints
 - Procedural maze generation algorithm
 - Custom sprite drawing for characters
 
