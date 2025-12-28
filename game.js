@@ -488,7 +488,7 @@ function initGame() {
 
     // Place enemies with better spacing to avoid blocking paths
     gameState.enemies = [];
-    const numEnemies = Math.min(gameState.level + 1, 5);
+    const numEnemies = 0; // No enemies - peaceful maze experience
     
     for (let i = 0; i < numEnemies; i++) {
         let ex, ey, attempts = 0;
