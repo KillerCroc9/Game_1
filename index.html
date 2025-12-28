@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Escaper - Navigate to Victory!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏃 Maze Escaper 🏃</h1>
+            <p class="subtitle">Navigate through the maze and reach the goal while avoiding enemies!</p>
+        </header>
+        
+        <div class="game-info">
+            <div class="info-item">
+                <span class="label">Level:</span>
+                <span id="level">1</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Score:</span>
+                <span id="score">0</span>
+            </div>
+            <div class="info-item">
+                <span class="label">Lives:</span>
+                <span id="lives">3</span>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <canvas id="gameCanvas"></canvas>
+            <div id="gameOverlay" class="overlay hidden">
+                <div class="overlay-content">
+                    <h2 id="overlayTitle"></h2>
+                    <p id="overlayMessage"></p>
+                    <button id="restartButton" class="btn">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <h3>Controls:</h3>
+            <div class="control-keys">
+                <div class="key-row">
+                    <button class="control-btn" data-key="ArrowUp">↑</button>
+                </div>
+                <div class="key-row">
+                    <button class="control-btn" data-key="ArrowLeft">←</button>
+                    <button class="control-btn" data-key="ArrowDown">↓</button>
+                    <button class="control-btn" data-key="ArrowRight">→</button>
+                </div>
+            </div>
+            <p class="control-hint">Use arrow keys or click buttons to move</p>
+        </div>
+
+        <div class="legend">
+            <h3>Legend:</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <canvas id="playerPreview" width="40" height="40"></canvas>
+                    <span>Player (You)</span>
+                </div>
+                <div class="legend-item">
+                    <canvas id="enemyPreview" width="40" height="40"></canvas>
+                    <span>Enemy (Avoid!)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-square goal"></div>
+                    <span>Goal (Reach it!)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-square wall"></div>
+                    <span>Wall</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
