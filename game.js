@@ -5,6 +5,9 @@ const CONFIG = {
     MAZE_HEIGHT: 15,
     PLAYER_SPEED: 200, // ms between moves
     ENEMY_SPEED: 400, // ms between moves
+    MAZE_GENERATION_MAX_ATTEMPTS: 10, // Max attempts to generate valid maze
+    ENEMY_MIN_DISTANCE_FROM_START: 5, // Minimum cells away from player start
+    ENEMY_MIN_DISTANCE_FROM_GOAL: 3, // Minimum cells away from goal
     COLORS: {
         wall: '#333333',
         path: '#f0f0f0',
@@ -466,7 +469,7 @@ function initGame() {
     let attempts = 0;
     
     // Keep generating until we have a valid maze where goal is reachable
-    while (!validMazeFound && attempts < 10) {
+    while (!validMazeFound && attempts < CONFIG.MAZE_GENERATION_MAX_ATTEMPTS) {
         attempts++;
         gameState.maze = generateMaze();
         
@@ -501,8 +504,8 @@ function initGame() {
                 gameState.maze[ey][ex] === 0 && // Must be a path
                 !(ex === 1 && ey === 1) && // Not at player start
                 !(ex === gameState.goal.x && ey === gameState.goal.y) && // Not at goal
-                Math.abs(ex - 1) + Math.abs(ey - 1) >= 5 && // Away from start
-                Math.abs(ex - gameState.goal.x) + Math.abs(ey - gameState.goal.y) >= 3; // Away from goal
+                Math.abs(ex - 1) + Math.abs(ey - 1) >= CONFIG.ENEMY_MIN_DISTANCE_FROM_START && // Away from start
+                Math.abs(ex - gameState.goal.x) + Math.abs(ey - gameState.goal.y) >= CONFIG.ENEMY_MIN_DISTANCE_FROM_GOAL; // Away from goal
             
             // Check collision with existing enemies
             if (validPosition) {
