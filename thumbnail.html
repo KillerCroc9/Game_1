@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Escaper - Game Thumbnail</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .thumbnail-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="thumbnail-container">
+        <h2>Maze Escaper - Game Thumbnail</h2>
+        <svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background gradient -->
+            <defs>
+                <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="goalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            
+            <!-- Background -->
+            <rect width="800" height="600" fill="url(#bgGradient)"/>
+            
+            <!-- Title -->
+            <text x="400" y="80" font-family="Arial, sans-serif" font-size="60" font-weight="bold" 
+                  fill="white" text-anchor="middle" stroke="#333" stroke-width="2">
+                MAZE ESCAPER
+            </text>
+            
+            <!-- Subtitle -->
+            <text x="400" y="120" font-family="Arial, sans-serif" font-size="24" 
+                  fill="white" text-anchor="middle">
+                Navigate • Escape • Survive
+            </text>
+            
+            <!-- Maze frame -->
+            <rect x="150" y="160" width="500" height="380" fill="#f0f0f0" rx="10"/>
+            
+            <!-- Simplified maze walls -->
+            <rect x="170" y="180" width="40" height="40" fill="#333"/>
+            <rect x="250" y="180" width="40" height="40" fill="#333"/>
+            <rect x="330" y="180" width="40" height="40" fill="#333"/>
+            <rect x="410" y="180" width="40" height="40" fill="#333"/>
+            <rect x="490" y="180" width="40" height="40" fill="#333"/>
+            <rect x="570" y="180" width="40" height="40" fill="#333"/>
+            
+            <rect x="170" y="260" width="40" height="40" fill="#333"/>
+            <rect x="330" y="260" width="40" height="40" fill="#333"/>
+            <rect x="490" y="260" width="40" height="40" fill="#333"/>
+            <rect x="570" y="260" width="40" height="40" fill="#333"/>
+            
+            <rect x="170" y="340" width="40" height="40" fill="#333"/>
+            <rect x="250" y="340" width="40" height="40" fill="#333"/>
+            <rect x="410" y="340" width="40" height="40" fill="#333"/>
+            <rect x="490" y="340" width="40" height="40" fill="#333"/>
+            
+            <rect x="170" y="420" width="40" height="40" fill="#333"/>
+            <rect x="330" y="420" width="40" height="40" fill="#333"/>
+            <rect x="410" y="420" width="40" height="40" fill="#333"/>
+            <rect x="570" y="420" width="40" height="40" fill="#333"/>
+            
+            <rect x="250" y="500" width="40" height="40" fill="#333"/>
+            <rect x="330" y="500" width="40" height="40" fill="#333"/>
+            <rect x="490" y="500" width="40" height="40" fill="#333"/>
+            
+            <!-- Goal (star) -->
+            <rect x="590" y="500" width="40" height="40" fill="url(#goalGradient)" rx="5"/>
+            <text x="610" y="530" font-size="30" fill="white" text-anchor="middle">★</text>
+            
+            <!-- Player character (green) -->
+            <g id="player">
+                <!-- Body -->
+                <circle cx="230" cy="440" r="18" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+                <!-- Eyes -->
+                <circle cx="224" cy="435" r="4" fill="white"/>
+                <circle cx="236" cy="435" r="4" fill="white"/>
+                <circle cx="224" cy="435" r="2" fill="black"/>
+                <circle cx="236" cy="435" r="2" fill="black"/>
+                <!-- Smile -->
+                <path d="M 220 443 Q 230 450 240 443" stroke="#2E7D32" stroke-width="2" fill="none"/>
+                <!-- Arms -->
+                <line x1="212" y1="440" x2="205" y2="430" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"/>
+                <line x1="248" y1="440" x2="255" y2="430" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"/>
+                <!-- Legs -->
+                <line x1="224" y1="455" x2="218" y2="468" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"/>
+                <line x1="236" y1="455" x2="242" y2="468" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            
+            <!-- Enemy 1 (red spiky) -->
+            <g id="enemy1">
+                <!-- Body -->
+                <circle cx="390" cy="360" r="18" fill="#FF5722"/>
+                <!-- Spikes -->
+                <polygon points="390,342 395,348 385,348" fill="#D32F2F"/>
+                <polygon points="408,360 402,355 402,365" fill="#D32F2F"/>
+                <polygon points="390,378 395,372 385,372" fill="#D32F2F"/>
+                <polygon points="372,360 378,355 378,365" fill="#D32F2F"/>
+                <polygon points="401,349 397,355 405,357" fill="#D32F2F"/>
+                <polygon points="401,371 397,365 405,363" fill="#D32F2F"/>
+                <polygon points="379,349 383,355 375,357" fill="#D32F2F"/>
+                <polygon points="379,371 383,365 375,363" fill="#D32F2F"/>
+                <!-- Eyes -->
+                <circle cx="384" cy="356" r="4" fill="yellow"/>
+                <circle cx="396" cy="356" r="4" fill="yellow"/>
+                <circle cx="384" cy="356" r="2" fill="red"/>
+                <circle cx="396" cy="356" r="2" fill="red"/>
+            </g>
+            
+            <!-- Enemy 2 -->
+            <g id="enemy2">
+                <circle cx="510" cy="280" r="18" fill="#FF5722"/>
+                <polygon points="510,262 515,268 505,268" fill="#D32F2F"/>
+                <polygon points="528,280 522,275 522,285" fill="#D32F2F"/>
+                <polygon points="510,298 515,292 505,292" fill="#D32F2F"/>
+                <polygon points="492,280 498,275 498,285" fill="#D32F2F"/>
+                <circle cx="504" cy="276" r="4" fill="yellow"/>
+                <circle cx="516" cy="276" r="4" fill="yellow"/>
+                <circle cx="504" cy="276" r="2" fill="red"/>
+                <circle cx="516" cy="276" r="2" fill="red"/>
+            </g>
+            
+            <!-- Arrow pointing to goal -->
+            <g opacity="0.7">
+                <path d="M 280 490 Q 400 470 560 490" stroke="white" stroke-width="3" 
+                      fill="none" stroke-dasharray="5,5">
+                    <animate attributeName="stroke-dashoffset" from="0" to="10" 
+                             dur="1s" repeatCount="indefinite"/>
+                </path>
+                <polygon points="560,490 550,485 550,495" fill="white"/>
+            </g>
+            
+            <!-- Game info badges -->
+            <g>
+                <rect x="50" y="200" width="80" height="60" fill="white" rx="5" opacity="0.9"/>
+                <text x="90" y="225" font-family="Arial" font-size="14" fill="#667eea" 
+                      text-anchor="middle" font-weight="bold">LEVEL</text>
+                <text x="90" y="245" font-family="Arial" font-size="24" fill="#333" 
+                      text-anchor="middle" font-weight="bold">1</text>
+            </g>
+            
+            <g>
+                <rect x="50" y="280" width="80" height="60" fill="white" rx="5" opacity="0.9"/>
+                <text x="90" y="305" font-family="Arial" font-size="14" fill="#667eea" 
+                      text-anchor="middle" font-weight="bold">LIVES</text>
+                <text x="90" y="325" font-family="Arial" font-size="24" fill="#333" 
+                      text-anchor="middle" font-weight="bold">❤️❤️❤️</text>
+            </g>
+            
+            <g>
+                <rect x="670" y="200" width="80" height="60" fill="white" rx="5" opacity="0.9"/>
+                <text x="710" y="225" font-family="Arial" font-size="14" fill="#667eea" 
+                      text-anchor="middle" font-weight="bold">SCORE</text>
+                <text x="710" y="245" font-family="Arial" font-size="20" fill="#333" 
+                      text-anchor="middle" font-weight="bold">0</text>
+            </g>
+            
+            <!-- Play button -->
+            <g cursor="pointer">
+                <rect x="320" y="555" width="160" height="40" fill="white" rx="20" opacity="0.9"/>
+                <text x="400" y="582" font-family="Arial" font-size="20" fill="#667eea" 
+                      text-anchor="middle" font-weight="bold">▶ PLAY NOW</text>
+            </g>
+        </svg>
+    </div>
+</body>
+</html>
