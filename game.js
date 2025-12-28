@@ -134,11 +134,11 @@ function drawPlayer(x, y, size, context = ctx) {
 }
 
 // Draw Enemy with proper graphics
-function drawEnemy(x, y, size, context = ctx) {
+function drawEnemy(x, y, size, context = ctx, animTime = null) {
     const centerX = x + size / 2;
     const centerY = y + size / 2;
     const scale = size / 40;
-    const time = Date.now() / 200;
+    const time = animTime !== null ? animTime : Date.now() / 200;
 
     // Body (spiky circle)
     context.fillStyle = '#FF5722';
@@ -242,8 +242,9 @@ function renderMaze() {
     ctx.fillText('★', gx, gy);
 
     // Draw enemies
+    const animTime = Date.now() / 200;
     gameState.enemies.forEach(enemy => {
-        drawEnemy(enemy.x * CONFIG.CELL_SIZE, enemy.y * CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
+        drawEnemy(enemy.x * CONFIG.CELL_SIZE, enemy.y * CONFIG.CELL_SIZE, CONFIG.CELL_SIZE, ctx, animTime);
     });
 
     // Draw player
@@ -401,17 +402,23 @@ function initGame() {
     const numEnemies = Math.min(gameState.level + 1, 5);
     
     for (let i = 0; i < numEnemies; i++) {
-        let ex, ey;
+        let ex, ey, attempts = 0;
         do {
             ex = Math.floor(Math.random() * (CONFIG.MAZE_WIDTH - 2)) + 1;
             ey = Math.floor(Math.random() * (CONFIG.MAZE_HEIGHT - 2)) + 1;
+            attempts++;
+            // Safety: stop trying after 100 attempts
+            if (attempts > 100) break;
         } while (
             gameState.maze[ey][ex] === 1 || 
             (ex === 1 && ey === 1) || 
             (ex === gameState.goal.x && ey === gameState.goal.y) ||
             Math.abs(ex - 1) + Math.abs(ey - 1) < 5
         );
-        gameState.enemies.push({ x: ex, y: ey });
+        // Only add enemy if valid position found
+        if (attempts <= 100) {
+            gameState.enemies.push({ x: ex, y: ey });
+        }
     }
 
     gameState.player = { x: 1, y: 1 };
