@@ -199,17 +199,32 @@ function drawPreviews() {
     drawEnemy(0, 0, 40, enemyPreviewCtx);
 }
 
-// Render the maze
+// Render the maze with 3D effects
 function renderMaze() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw maze
+    // Draw maze with 3D depth
     for (let y = 0; y < CONFIG.MAZE_HEIGHT; y++) {
         for (let x = 0; x < CONFIG.MAZE_WIDTH; x++) {
             if (gameState.maze[y][x] === 1) {
+                // 3D wall effect with shadow
+                const wallX = x * CONFIG.CELL_SIZE;
+                const wallY = y * CONFIG.CELL_SIZE;
+                
+                // Shadow
+                ctx.fillStyle = '#1a1a1a';
+                ctx.fillRect(wallX + 3, wallY + 3, CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
+                
+                // Main wall
                 ctx.fillStyle = CONFIG.COLORS.wall;
-                ctx.fillRect(x * CONFIG.CELL_SIZE, y * CONFIG.CELL_SIZE, 
-                           CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
+                ctx.fillRect(wallX, wallY, CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
+                
+                // Top highlight
+                ctx.fillStyle = '#4a4a4a';
+                ctx.fillRect(wallX, wallY, CONFIG.CELL_SIZE, 5);
+                
+                // Left highlight
+                ctx.fillRect(wallX, wallY, 5, CONFIG.CELL_SIZE);
             } else {
                 ctx.fillStyle = CONFIG.COLORS.path;
                 ctx.fillRect(x * CONFIG.CELL_SIZE, y * CONFIG.CELL_SIZE, 
@@ -218,39 +233,98 @@ function renderMaze() {
         }
     }
 
-    // Draw goal with gradient
-    const gradient = ctx.createLinearGradient(
-        gameState.goal.x * CONFIG.CELL_SIZE,
-        gameState.goal.y * CONFIG.CELL_SIZE,
-        (gameState.goal.x + 1) * CONFIG.CELL_SIZE,
-        (gameState.goal.y + 1) * CONFIG.CELL_SIZE
-    );
+    // Draw goal with 3D gradient and shadow
+    const goalX = gameState.goal.x * CONFIG.CELL_SIZE;
+    const goalY = gameState.goal.y * CONFIG.CELL_SIZE;
+    
+    // Goal shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.fillRect(goalX + 4, goalY + 4, CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
+    
+    // Goal gradient
+    const gradient = ctx.createLinearGradient(goalX, goalY, goalX + CONFIG.CELL_SIZE, goalY + CONFIG.CELL_SIZE);
     gradient.addColorStop(0, '#f093fb');
     gradient.addColorStop(1, '#f5576c');
     ctx.fillStyle = gradient;
-    ctx.fillRect(gameState.goal.x * CONFIG.CELL_SIZE, 
-                gameState.goal.y * CONFIG.CELL_SIZE,
-                CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
+    ctx.fillRect(goalX, goalY, CONFIG.CELL_SIZE, CONFIG.CELL_SIZE);
 
-    // Draw star in goal
+    // Draw star in goal with glow
+    ctx.shadowColor = 'rgba(245, 87, 108, 0.8)';
+    ctx.shadowBlur = 10;
     ctx.fillStyle = 'white';
-    const gx = gameState.goal.x * CONFIG.CELL_SIZE + CONFIG.CELL_SIZE / 2;
-    const gy = gameState.goal.y * CONFIG.CELL_SIZE + CONFIG.CELL_SIZE / 2;
-    ctx.font = '24px Arial';
+    const gx = goalX + CONFIG.CELL_SIZE / 2;
+    const gy = goalY + CONFIG.CELL_SIZE / 2;
+    ctx.font = 'bold 24px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('★', gx, gy);
+    ctx.shadowBlur = 0;
 
-    // Draw enemies
+    // Draw enemies with 3D effect (drawn before player)
     const animTime = Date.now() / 200;
     gameState.enemies.forEach(enemy => {
+        // Enemy shadow
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.beginPath();
+        ctx.arc(enemy.x * CONFIG.CELL_SIZE + CONFIG.CELL_SIZE / 2 + 3, 
+                enemy.y * CONFIG.CELL_SIZE + CONFIG.CELL_SIZE / 2 + 3, 
+                15, 0, Math.PI * 2);
+        ctx.fill();
+        
         drawEnemy(enemy.x * CONFIG.CELL_SIZE, enemy.y * CONFIG.CELL_SIZE, CONFIG.CELL_SIZE, ctx, animTime);
     });
 
-    // Draw player
-    drawPlayer(gameState.player.x * CONFIG.CELL_SIZE, 
-              gameState.player.y * CONFIG.CELL_SIZE, 
-              CONFIG.CELL_SIZE);
+    // Draw player with 3D effect (drawn last to be on top)
+    const playerX = gameState.player.x * CONFIG.CELL_SIZE;
+    const playerY = gameState.player.y * CONFIG.CELL_SIZE;
+    
+    // Player shadow
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+    ctx.beginPath();
+    ctx.arc(playerX + CONFIG.CELL_SIZE / 2 + 2, 
+            playerY + CONFIG.CELL_SIZE / 2 + 2, 
+            15, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Player with glow
+    ctx.shadowColor = 'rgba(76, 175, 80, 0.6)';
+    ctx.shadowBlur = 8;
+    drawPlayer(playerX, playerY, CONFIG.CELL_SIZE);
+    ctx.shadowBlur = 0;
+}
+
+// BFS pathfinding to check if goal is reachable from start
+function isGoalReachable(startX, startY, goalX, goalY, maze) {
+    const visited = Array(CONFIG.MAZE_HEIGHT).fill().map(() => 
+        Array(CONFIG.MAZE_WIDTH).fill(false)
+    );
+    
+    const queue = [[startX, startY]];
+    visited[startY][startX] = true;
+    
+    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+    
+    while (queue.length > 0) {
+        const [x, y] = queue.shift();
+        
+        if (x === goalX && y === goalY) {
+            return true;
+        }
+        
+        for (let [dx, dy] of directions) {
+            const nx = x + dx;
+            const ny = y + dy;
+            
+            if (nx >= 0 && nx < CONFIG.MAZE_WIDTH && 
+                ny >= 0 && ny < CONFIG.MAZE_HEIGHT && 
+                maze[ny][nx] === 0 && !visited[ny][nx]) {
+                visited[ny][nx] = true;
+                queue.push([nx, ny]);
+            }
+        }
+    }
+    
+    return false;
 }
 
 // Check if move is valid
@@ -388,35 +462,64 @@ function hideOverlay() {
 
 // Initialize game
 function initGame() {
-    gameState.maze = generateMaze();
+    let validMazeFound = false;
+    let attempts = 0;
     
-    // Set goal position (far from start)
-    gameState.goal = { 
-        x: CONFIG.MAZE_WIDTH - 2, 
-        y: CONFIG.MAZE_HEIGHT - 2 
-    };
-    gameState.maze[gameState.goal.y][gameState.goal.x] = 0;
+    // Keep generating until we have a valid maze where goal is reachable
+    while (!validMazeFound && attempts < 10) {
+        attempts++;
+        gameState.maze = generateMaze();
+        
+        // Set goal position (far from start)
+        gameState.goal = { 
+            x: CONFIG.MAZE_WIDTH - 2, 
+            y: CONFIG.MAZE_HEIGHT - 2 
+        };
+        gameState.maze[gameState.goal.y][gameState.goal.x] = 0;
 
-    // Place enemies
+        // Verify goal is reachable from start
+        if (isGoalReachable(1, 1, gameState.goal.x, gameState.goal.y, gameState.maze)) {
+            validMazeFound = true;
+        }
+    }
+
+    // Place enemies with better spacing to avoid blocking paths
     gameState.enemies = [];
     const numEnemies = Math.min(gameState.level + 1, 5);
     
     for (let i = 0; i < numEnemies; i++) {
         let ex, ey, attempts = 0;
+        let validPosition = false;
+        
         do {
             ex = Math.floor(Math.random() * (CONFIG.MAZE_WIDTH - 2)) + 1;
             ey = Math.floor(Math.random() * (CONFIG.MAZE_HEIGHT - 2)) + 1;
             attempts++;
+            
+            // Check if position is valid
+            validPosition = 
+                gameState.maze[ey][ex] === 0 && // Must be a path
+                !(ex === 1 && ey === 1) && // Not at player start
+                !(ex === gameState.goal.x && ey === gameState.goal.y) && // Not at goal
+                Math.abs(ex - 1) + Math.abs(ey - 1) >= 5 && // Away from start
+                Math.abs(ex - gameState.goal.x) + Math.abs(ey - gameState.goal.y) >= 3; // Away from goal
+            
+            // Check collision with existing enemies
+            if (validPosition) {
+                for (let other of gameState.enemies) {
+                    if (other.x === ex && other.y === ey) {
+                        validPosition = false;
+                        break;
+                    }
+                }
+            }
+            
             // Safety: stop trying after 100 attempts
             if (attempts > 100) break;
-        } while (
-            gameState.maze[ey][ex] === 1 || 
-            (ex === 1 && ey === 1) || 
-            (ex === gameState.goal.x && ey === gameState.goal.y) ||
-            Math.abs(ex - 1) + Math.abs(ey - 1) < 5
-        );
+        } while (!validPosition);
+        
         // Only add enemy if valid position found
-        if (attempts <= 100) {
+        if (validPosition && attempts <= 100) {
             gameState.enemies.push({ x: ex, y: ey });
         }
     }
